@@ -1,0 +1,59 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+  <display-name>The NorthW Blog Web Application</display-name>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring.xml</param-value>
+  </context-param>
+
+  <!--错误拦截器应该放在最外面-->
+  <filter>
+    <filter-name>exceptionCatcher</filter-name>
+    <filter-class>com.thenorthw.tc.web.filter.ExceptionCatchFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>exceptionCatcher</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <filter>
+    <filter-name>mdc</filter-name>
+    <filter-class>com.thenorthw.tc.web.filter.MDCFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>mdc</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring.xml</param-value>
+    </init-param>
+    <load-on-startup>8</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+
+
+  <!--配置上下文载入器-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.thenorthw.tc.web.listener.TcListener</listener-class>
+  </listener>
+</web-app>

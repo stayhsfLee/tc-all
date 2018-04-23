@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 全局缓存 -->
+        <setting name="cacheEnabled" value="flase"/>
+        <!-- 允许JDBC支持生成的键 -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!-- 配置默认的执行器,REUSE执行器重用预处理语句.BATCH执行器重用语句和批量更新 -->
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <!-- 延时加载 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!-- 设置超时时间,决定驱动等待一个数据库响应的时间 -->
+        <setting name="defaultStatementTimeout" value="25000"/>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+    
+    <!-- 别名设置 -->
+    <!--由于java命名规范和数据库命名规范不一致，所以需要在每个mapper.xml中写上ResultMap-->
+    <typeAliases>
+        <typeAlias alias="Account" type="com.thenorthw.blog.common.model.account.Account"/>
+
+        <typeAlias alias="User" type="com.thenorthw.blog.common.model.user.User"/>
+
+        <typeAlias alias="Group" type="com.thenorthw.blog.common.model.group.Group"/>
+        <typeAlias alias="Article" type="com.thenorthw.blog.common.model.article.Article"/>
+        <typeAlias alias="ArticleContent" type="com.thenorthw.blog.common.model.article.ArticleContent"/>
+
+        <typeAlias alias="Group" type="com.thenorthw.blog.common.model.group.Group"/>
+        <typeAlias alias="RArticleGroup" type="com.thenorthw.blog.common.model.group.RArticleGroup"/>
+
+        <typeAlias alias="Tag" type="com.thenorthw.blog.common.model.tag.Tag"/>
+        <typeAlias alias="RArticleTag" type="com.thenorthw.blog.common.model.tag.RArticleTag"/>
+
+        <typeAlias alias="Notification" type="com.thenorthw.blog.common.model.notification.Notification"/>
+
+
+    </typeAliases>
+
+    <!-- 指定映射器路径 -->
+    <mappers>
+        <mapper resource="sqlMapper/account/account.xml"/>
+        <mapper resource="sqlMapper/user/user.xml"/>
+
+        <mapper resource="sqlMapper/group/group.xml"/>
+        <mapper resource="sqlMapper/group/rarticlegroup.xml"/>
+
+
+        <mapper resource="sqlMapper/article/article.xml"/>
+        <mapper resource="sqlMapper/article/articlecontent.xml"/>
+
+        <!--<mapper resource="sqlMapper/notification/notification.xml"/>-->
+    </mappers>
+
+
+</configuration>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thenorthw.blog.common.dao.article.ArticleContentDao">
+
+    <resultMap id="ArticleContentMap" type="ArticleContent">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="length" property="length" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+
+    <select id="getArticleContent" parameterType="long" resultMap="ArticleContentMap">
+        SELECT
+        id,
+        length,
+        content
+        FROM article_content
+        WHERE id = #{id}
+    </select>
+
+    <select id="getArticleContentsByIds" resultMap="ArticleContentMap">
+        SELECT
+        id,
+        length,
+        content
+        FROM article_content
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <insert id="postArticleContent" parameterType="ArticleContent">
+        INSERT INTO article_content(
+        id,
+        length,
+        content,
+        gmt_create,
+        gmt_modified
+        )
+        VALUES(#{id},#{length},#{content},#{gmtCreate},#{gmtModified})
+    </insert>
+
+    <update id="updateArticleContent" parameterType="ArticleContent">
+        UPDATE article_content
+        SET
+        length = #{length},
+        content = #{content},
+        gmt_modified = #{gmtModified}
+        WHERE id = #{id}
+    </update>
+
+
+    <delete id="deleteArticleContent" parameterType="Long">
+        DELETE FROM article_content
+        WHERE id = #{id}
+    </delete>
+</mapper>

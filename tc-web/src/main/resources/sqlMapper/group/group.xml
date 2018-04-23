@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thenorthw.blog.common.dao.group.GroupDao">
+
+    <resultMap id="GroupMap" type="Group">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="en" property="en" jdbcType="VARCHAR"/>
+        <result column="parent_group_id" property="parentGroupId" jdbcType="BIGINT"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="fullColumns">
+        id,
+        name,
+        en,
+        parent_group_id,
+        level,
+        gmt_create,
+        gmt_modified
+    </sql>
+
+
+    <select id="getAllGroup"  resultMap="GroupMap" >
+        SELECT
+        id,
+        name,
+        en,
+        parent_group_id,
+        level
+        FROM groups;
+    </select>
+
+    <select id="getGroupByName" parameterType="string" resultMap="GroupMap">
+        SELECT
+        id,
+        name,
+        en,
+        parent_group_id,
+        level
+        FROM groups
+        WHERE name = #{name};
+    </select>
+
+    <select id="getGroupByEn" parameterType="string" resultMap="GroupMap">
+        SELECT
+        id,
+        name,
+        en,
+        parent_group_id,
+        level
+        FROM groups
+        WHERE en = #{en};
+    </select>
+
+
+    <insert id="addGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO groups(
+        id,
+        name,
+        en,
+        parent_group_id,
+        level,
+        gmt_create,
+        gmt_modified
+        )
+        VALUES(#{id},#{name},#{en},#{parentGroupId},#{level},#{gmtCreate},#{gmtModified})
+    </insert>
+
+    <update id="updateGroup" parameterType="Group">
+        UPDATE groups
+        SET name = #{name}, en = #{en}, parent_group_id = #{parentGroupId}, level = #{level}, gmt_modified = #{gmtModified}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteGroup" parameterType="Long">
+        DELETE FROM groups
+        WHERE id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thenorthw.blog.common.dao.group.GroupDao">
+
+    <resultMap id="NotificationMap" type="Notification">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="BIGINT"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="fullColumns">
+        id,
+        name,
+        content,
+        grammar,
+        creator,
+        gmt_create,
+        gmt_modified
+    </sql>
+
+
+    <select id="getAllNotifications"  resultMap="NotificationMap" >
+        SELECT
+        <include refid="fullColumns"/>
+        FROM notification
+    </select>
+
+    <select id="getNotifications" resultMap="NotificationMap">
+        SELECT
+        <include refid="fullColumns"/>
+        FROM notification
+        ORDER BY gmt_modified DESC
+        limit #{limit}
+    </select>
+
+    <insert id="addNotification">
+        INSERT INTO notification(
+        name,
+        creator,
+        content,
+        grammar,
+        gmt_create,
+        gmt_modified
+        )
+        VALUES(#{name},#{creator},#{content},#{grammar},NOW(),NOW())
+    </insert>
+
+
+
+    <delete id="deleteNotification" parameterType="Long">
+        DELETE FROM notification
+        WHERE id = #{id}
+    </delete>
+</mapper>

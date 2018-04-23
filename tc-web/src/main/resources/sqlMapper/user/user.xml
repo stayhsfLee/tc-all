@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thenorthw.blog.common.dao.user.UserDao">
+    <resultMap id="UserMaps" type="User">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="nick" column="nick" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="backgroundImg" column="background_img" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="fullColumns">
+        `id`,
+        `nick`,
+        `sex`,
+        `introduction`,
+        `avatar`,
+        `background_img`
+        `gmt_create`,
+        `gmt_modified`
+    </sql>
+    <insert id="insertNewUser" parameterType="User">
+      INSERT INTO user(
+        `id`,
+        `nick`,
+        `sex`,
+        `introduction`,
+        `avatar`,
+        `background_img`,
+        `gmt_create`,
+        `gmt_modified`)
+      VALUES (#{id},#{nick},#{sex},#{introduction},#{avatar},#{backgroundImg},#{gmtCreate},#{gmtModified})
+    </insert>
+
+    <!--获得信息-->
+    <!--<select id="getUserByLoginname" parameterType="string" resultType="User">-->
+      <!--select * from user_profile where loginname=#{loginname}-->
+    <!--</select>-->
+    <select id="getUserProfileByUserId" parameterType="long" resultType="User">
+        SELECT
+        <include refid="fullColumns"/>
+        FROM user WHERE id=#{id}
+    </select>
+
+    <select id="getUserProfileByUserIds" resultMap="UserMaps">
+        SELECT
+        `id`,
+        `nick`,
+        `avatar`
+        FROM user WHERE id IN
+        <foreach collection="userIds" item="id" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <!--<select id="getUserByNick" parameterType="string" resultType="User">-->
+        <!--select * from user_profile where nick=#{nick}-->
+    <!--</select>-->
+
+    <!--更新信息-->
+    <!--<update id="activateUser" parameterType="User">-->
+      <!--UPDATE users SET activated_time = #{activated_time} WHERE loginname = #{loginanme};-->
+    <!--</update>-->
+    <update id="updateUserProfile" parameterType="User">
+        UPDATE user
+        SET  nick = #{nick} , sex = #{sex} , introduction = #{introduction}, gmt_modified = #{gmtModified}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserAvatar">
+        UPDATE user
+        SET avatar=#{avatar}
+        WHERE id = #{creator}
+    </update>
+
+</mapper>

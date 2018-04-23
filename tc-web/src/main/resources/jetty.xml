@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--add jetty configure variables from another xml file-->
+    <context:property-placeholder location="jetty-config.properties"/>
+
+    <bean id="jettyServer" class="org.eclipse.jetty.server.Server" destroy-method="stop">
+        <constructor-arg name="pool">
+            <bean class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+                <property name="minThreads" value="5"></property>
+                <property name="maxThreads" value="50"></property>
+            </bean>
+        </constructor-arg>
+
+        <property name="connectors">
+            <list>
+                <bean class="org.eclipse.jetty.server.ServerConnector">
+                    <constructor-arg ref="jettyServer"/>
+                    <property name="port" value="${jetty.port}"></property>
+                </bean>
+            </list>
+        </property>
+
+        <property name="handler">
+            <bean class="org.eclipse.jetty.server.handler.HandlerCollection">
+                <property name="handlers">
+                    <list>
+                        <bean class="org.eclipse.jetty.webapp.WebAppContext">
+                            <property name="contextPath" value="${jetty.contextPath}"></property>
+                            <property name="descriptor" value="${jetty.descriptor}"></property>
+                            <property name="resourceBase" value="${jetty.resourceBase}"/>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</beans>

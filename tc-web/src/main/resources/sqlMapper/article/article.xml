@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thenorthw.blog.common.dao.article.ArticleDao">
+
+    <resultMap id="ArticleMap" type="Article">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="view" property="view" jdbcType="INTEGER"/>
+        <result column="grammar" property="grammar" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="fullColumns">
+        id,
+        name,
+        creator,
+        view,
+        grammar,
+        gmt_create,
+        gmt_modified
+    </sql>
+
+
+    <select id="getRecentArticles" parameterType="int"  resultMap="ArticleMap" >
+        SELECT
+        id,
+        name,
+        creator,
+        view,
+        grammar,
+        gmt_create,
+        gmt_modified
+        FROM article
+        ORDER BY gmt_modified DESC
+        LIMIT 0, 10;
+    </select>
+
+    <select id="getAllArticles" resultMap="ArticleMap">
+        SELECT
+        id,
+        name,
+        creator,
+        view,
+        grammar,
+        gmt_create,
+        gmt_modified
+        FROM article
+        LIMIT #{startNumber},#{pageSize};
+    </select>
+
+    <select id="getArticleById" parameterType="long" resultMap="ArticleMap">
+        SELECT
+        id,
+        name,
+        creator,
+        view,
+        grammar,
+        gmt_create,
+        gmt_modified
+        FROM article
+        WHERE id = #{id}
+    </select>
+    <select id="getTotalNumber" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM article
+    </select>
+
+
+    <select id="getArticleByIds"  resultMap="ArticleMap">
+        SELECT
+        id,
+        name,
+        creator,
+        view,
+        grammar,
+        gmt_create,
+        gmt_modified
+        FROM article
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")"
+                 separator=",">
+        #{id}
+        </foreach>
+    </select>
+
+    <update id="updateViewTimes" parameterType="long">
+        UPDATE article
+        SET view = view + 1
+        WHERE id = #{id}
+    </update>
+
+    <insert id="postArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO article(
+        id,
+        name,
+        creator,
+        grammar,
+        gmt_create,
+        gmt_modified
+        )
+        VALUES(#{id},#{name},#{creator},#{grammar},#{gmtCreate},#{gmtModified})
+    </insert>
+
+    <update id="updateArticle" parameterType="Article">
+        UPDATE article
+        SET name = #{name},  grammar = #{grammar}, gmt_modified = #{gmtModified}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteArticle" parameterType="Long">
+        DELETE FROM article
+        WHERE id = #{id}
+    </delete>
+</mapper>

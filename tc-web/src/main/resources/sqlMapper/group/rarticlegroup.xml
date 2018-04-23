@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thenorthw.blog.common.dao.group.RArticleGroupDao">
+
+    <resultMap id="RArticleGroupMap" type="RArticleGroup">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="article_id" property="articleId" jdbcType="BIGINT"/>
+        <result column="group_id" property="groupId" jdbcType="BIGINT"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="fullColumns">
+        id,
+        article_id,
+        group_id,
+        gmt_create,
+        gmt_modified
+    </sql>
+
+
+    <select id="getAllRs"  resultMap="RArticleGroupMap" >
+        SELECT
+        id,
+        article_id,
+        group_id,
+        gmt_create,
+        gmt_modified
+        FROM r_article_group;
+    </select>
+
+    <select id="getRsByGroupId" parameterType="Long" resultMap="RArticleGroupMap" >
+        SELECT
+        id,
+        article_id,
+        group_id,
+        gmt_create,
+        gmt_modified
+        FROM r_article_group
+        WHERE group_id = #{id};
+    </select>
+
+    <select id="getGroupIdByArticleId" parameterType="long" resultMap="RArticleGroupMap">
+        SELECT
+        id,
+        article_id,
+        group_id,
+        gmt_create,
+        gmt_modified
+        FROM r_article_group
+        WHERE article_id = #{id};
+    </select>
+
+    <insert id="addR" parameterType="RArticleGroup" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO r_article_group(
+        id,
+        article_id,
+        group_id,
+        gmt_create,
+        gmt_modified
+        )
+        VALUES(#{id},#{articleId},#{groupId},#{gmtCreate},#{gmtModified})
+    </insert>
+
+
+    <delete id="deleteRByArticleId" parameterType="long">
+        DELETE FROM r_article_group
+        WHERE article_id = #{id};
+    </delete>
+</mapper>
