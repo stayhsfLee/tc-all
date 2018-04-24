@@ -18,6 +18,7 @@ import org.springframework.validation.FieldError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * Created by theNorthW on $date.
@@ -43,8 +44,8 @@ public class TcInterceptor {
         //登录验证
         LoginNeed loginNeed = ((MethodSignature) pjp.getSignature()).getMethod().getAnnotation(LoginNeed.class);
         if(loginNeed != null){
-            Claim uidc = JwtUtil.verify(httpServletRequest.getHeader("x-token")).get("u");
-            String uid = uidc == null ? null : uidc.asString();
+            Map<String,Claim> uidc = JwtUtil.verify(httpServletRequest.getHeader("x-token"));
+            String uid = uidc == null ? null : uidc.get("u").asString();
             if (uid == null){
                 responseModel.setResponseCode(ResponseCode.UNAUTHORIZED.getCode());
                 responseModel.setMessage(ResponseCode.UNAUTHORIZED.getMessage());
@@ -75,8 +76,8 @@ public class TcInterceptor {
         //登录验证
         LoginNeed loginNeed = ((MethodSignature) pjp.getSignature()).getMethod().getAnnotation(LoginNeed.class);
         if(loginNeed != null){
-            Claim uidc = JwtUtil.verify(httpServletRequest.getHeader("x-token")).get("u");
-            String uid = uidc == null ? null : uidc.asString();
+            Map<String,Claim> uidc = JwtUtil.verify(httpServletRequest.getHeader("x-token"));
+            String uid = uidc == null ? null : uidc.get("u").asString();
             if (uid == null){
                 responseModel.setResponseCode(ResponseCode.UNAUTHORIZED.getCode());
                 responseModel.setMessage(ResponseCode.UNAUTHORIZED.getMessage());
